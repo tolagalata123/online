@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #174ea6;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 25px;
+            background: #174ea6;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #103875;
+        }
+
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Registration</h2>
+
+    <form id="registrationForm">
+
+        <label>Full Name</label>
+        <input
+            type="text"
+            name="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+        <label>Age</label>
+        <input
+            type="number"
+            name="age"
+            placeholder="Enter your age"
+            min="1"
+            max="120"
+            required
+        >
+
+        <label>Gender</label>
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <label>Phone Number</label>
+        <input
+            type="tel"
+            name="phone"
+            placeholder="Enter phone number"
+            required
+        >
+
+        <button type="submit" id="submitBtn">
+            Register Now
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
+<script>
+
+const scriptURL =
+"https://script.google.com/macros/s/AKfycbwgt6xeupB6qTZ1PZNqtzLe60VeFQf6TJbriahdsXiF9Q1ulCkRxvVFu_G-Gfpqnvpplw/exec";
+
+const form = document.getElementById("registrationForm");
+const message = document.getElementById("message");
+const button = document.getElementById("submitBtn");
+
+form.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+    message.textContent = "";
+
+    const formData = new FormData(form);
+    const data = new URLSearchParams();
+
+    for (const [key, value] of formData.entries()) {
+        data.append(key, value);
+    }
+
+    try {
+
+        await fetch(scriptURL, {
+            method: "POST",
+            mode: "no-cors",
+            body: data
+        });
+
+        message.style.color = "green";
+        message.textContent =
+            "Registration submitted!";
+
+        form.reset();
+
+    } catch (error) {
+
+        message.style.color = "red";
+        message.textContent =
+            "Something went wrong. Please try again.";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Register Now";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
